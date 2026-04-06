@@ -7,8 +7,6 @@ import { showLoading, showError } from '../components/ui.js';
 import Store from '../utils/store.js';
 
 let charts = {};
-let _dashTimer = null;
-let _isRefreshing = false;
 
 export async function renderDashboard() {
   const main = document.getElementById('main-content');
@@ -33,9 +31,6 @@ export async function renderDashboard() {
       renderPaymentChart(dash);
       renderLowStockChart(dash);
     }
-
-    if (_dashTimer) clearInterval(_dashTimer);
-    _dashTimer = setInterval(() => refreshQuickStats(), 30000);
 
   } catch (err) {
     showError(main, err.message);
@@ -296,18 +291,4 @@ function chartDefaults({ yFormatter = (v) => v } = {}) {
   };
 }
 
-async function refreshQuickStats() {
-  if (_isRefreshing) return;
-  _isRefreshing = true;
-  try {
-    const res = await DashboardService.getDailySales();
-    const data = res.data;
-    const el = document.getElementById('kpi-today');
-    const todayValue = data?.today?.total ?? data?.total ?? 0;
-    if (el) el.textContent = formatCurrency(todayValue);
-  } catch (err) {
-    console.error('Error refreshing stats:', err.message);
-  } finally {
-    _isRefreshing = false;
-  }
-}
+
