@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalles y Regalos Encantos Eternos — Admin — Encantos Eternos</title>
+  <link rel="icon" type="image/png" href="icon/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Jost:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link rel="stylesheet" href="assets/styles-admin-components.css" />
+  <link rel="stylesheet" href="assets/styles-wc-additions.css" />
+  <link rel="stylesheet" href="assets/styles-overrides.css" />
+  <script>
+    if (localStorage.getItem('ee_dark') === '1') document.body && document.body.classList.add('dark-mode');
+  </script>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-page" class="login-page-pub hidden">
+  <div class="login-bg-pub">
+    <div class="login-orb login-orb-1"></div>
+    <div class="login-orb login-orb-2"></div>
+  </div>
+  <div class="login-card-pub">
+    <div class="login-logo-pub">
+      <img src="icon/logo.png" alt="Encantos Eternos" class="login-brand-img">
+      <div>
+        <h1 class="login-brand-name">Encantos Eternos</h1>
+        <p class="login-brand-sub">Panel de Administración</p>
+      </div>
+    </div>
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input type="email" id="login-email" class="form-control" placeholder="usuario@floreria.com" required autocomplete="email" />
+        <span class="form-error" id="err-email"></span>
+      </div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="form-label">Contraseña</label>
+        <div style="position:relative">
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password" style="padding-right:44px" />
+          <button type="button" id="toggle-pwd" tabindex="-1" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--gris-400)">👁</button>
+        </div>
+        <span class="form-error" id="err-password"></span>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:20px;font-size:15px;padding:13px" id="login-btn">
+        <span id="login-btn-text">Iniciar sesión</span>
+      </button>
+    </form>
+    <div style="text-align:center;margin-top:1.5rem">
+      <a href="index.html" style="font-size:13px;color:var(--gris-500)">← Ver catálogo público</a>
+    </div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="app-shell" class="admin-layout hidden">
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-brand">
+      <div style="display:flex;align-items:center;gap:10px">
+        <img src="icon/logo.png" alt="logo" style="width:34px;height:34px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(255,61,138,.3))">
+        <div>
+          <div class="brand-name">Encantos Eternos</div>
+          <div class="brand-sub">Admin Panel</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="avatar" id="user-avatar">?</div>
+      <div class="sidebar-user-info">
+        <div class="name" id="user-name">Cargando...</div>
+        <div class="role" id="user-role">—</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label" data-roles="admin,manager,employee,cashier">Principal</div>
+      <a href="#/dashboard" class="nav-item" data-route="/dashboard" data-roles="admin,manager,employee,cashier">
+        <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
+      </a>
+      <a href="#/pos" class="nav-item" data-route="/pos" data-roles="admin,manager,employee,cashier">
+        <span class="nav-icon">🛒</span><span class="nav-label">Punto de Venta</span>
+      </a>
+      <a href="#/cashbox" class="nav-item" data-route="/cashbox" data-roles="admin,manager,employee,cashier">
+        <span class="nav-icon">💰</span><span class="nav-label">Caja</span>
+      </a>
+
+      <div class="nav-section-label" data-roles="admin,manager,warehouse">Catálogo</div>
+      <a href="#/products" class="nav-item" data-route="/products" data-roles="admin,manager,warehouse">
+        <span class="nav-icon">🌺</span><span class="nav-label">Productos</span>
+      </a>
+      <a href="#/categories" class="nav-item" data-route="/categories" data-roles="admin,manager">
+        <span class="nav-icon">🏷️</span><span class="nav-label">Categorías</span>
+      </a>
+      <a href="#/recipes" class="nav-item" data-route="/recipes" data-roles="admin,manager">
+        <span class="nav-icon">💐</span><span class="nav-label">Recetas</span>
+      </a>
+
+      <div class="nav-section-label" data-roles="admin,manager,employee,warehouse">Operaciones</div>
+      <a href="#/inventory" class="nav-item" data-route="/inventory" data-roles="admin,manager,warehouse">
+        <span class="nav-icon">📦</span><span class="nav-label">Inventario</span>
+      </a>
+      <a href="#/sales" class="nav-item" data-route="/sales" data-roles="admin,manager,employee">
+        <span class="nav-icon">🧾</span><span class="nav-label">Ventas</span>
+      </a>
+      <a href="#/finances" class="nav-item" data-route="/finances" data-roles="admin,manager">
+        <span class="nav-icon">💳</span><span class="nav-label">Finanzas</span>
+      </a>
+
+      <div class="nav-section-label" data-roles="admin,manager">Gestión</div>
+      <a href="#/employees" class="nav-item" data-route="/employees" data-roles="admin">
+        <span class="nav-icon">👥</span><span class="nav-label">Empleados</span>
+      </a>
+      <a href="#/reports" class="nav-item" data-route="/reports" data-roles="admin,manager">
+        <span class="nav-icon">📈</span><span class="nav-label">Reportes</span>
+      </a>
+      <a href="#/alerts" class="nav-item" data-route="/alerts" data-roles="admin,manager,employee,cashier,warehouse">
+        <span class="nav-icon">🔔</span><span class="nav-label">Alertas</span>
+        <span class="nav-badge" id="nav-alert-badge" style="display:none">0</span>
+      </a>
+      <a href="#/audit" class="nav-item" data-route="/audit" data-roles="admin">
+        <span class="nav-icon">🔍</span><span class="nav-label">Auditoría</span>
+      </a>
+
+      <div class="nav-section-label" data-roles="admin,manager">Acceso Público</div>
+      <a href="index.html" class="nav-item" target="_blank" data-roles="admin,manager">
+        <span class="nav-icon">🌐</span><span class="nav-label">Ver catálogo</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button id="logout-btn" class="btn-logout">↩ Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="admin-main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button id="mobile-menu-btn" class="btn-hamburger">☰</button>
+        <div>
+          <div class="page-title" id="topbar-title">Panel Admin</div>
+          <div class="page-breadcrumb">
+            <span id="cashbox-dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gris-300);margin-right:5px;vertical-align:middle"></span>
+            <span id="cashbox-status-text" style="font-size:11px">Verificando caja...</span>
+          </div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-dark-toggle" id="btn-dark" onclick="toggleAdminDark()" title="Modo oscuro">🌙</button>
+        <button class="btn-dark-toggle" id="refresh-alerts-btn" title="Alertas" style="position:relative">
+          🔔<span class="nav-badge" id="topbar-alert-count" style="display:none;position:absolute;top:2px;right:2px;min-width:15px;height:15px;font-size:9px;padding:0 3px;line-height:15px">0</span>
+        </button>
+        <button class="btn-dark-toggle" id="health-btn" title="Estado servidor">
+          <span id="health-dot" style="color:var(--gris-300)">●</span>
+        </button>
+        <div style="font-size:12px;color:var(--gris-500);font-weight:500;display:none" id="topbar-time" class="hide-mobile"></div>
+      </div>
+    </header>
+
+    <main id="main-content" class="admin-content">
+      <div style="display:flex;align-items:center;justify-content:center;height:200px;gap:12px">
+        <div class="spinner"></div>
+        <span style="color:var(--gris-500)">Cargando...</span>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script type="module" src="app.js?v=2"></script>
+<script>
+  function toggleAdminDark() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('ee_dark', isDark ? '1' : '0');
+    document.getElementById('btn-dark').textContent = isDark ? '☀️' : '🌙';
+  }
+  if (localStorage.getItem('ee_dark') === '1') {
+    document.body.classList.add('dark-mode');
+    document.addEventListener('DOMContentLoaded', () => {
+      const b = document.getElementById('btn-dark');
+      if (b) b.textContent = '☀️';
+    });
+  }
+</script>
+</body>
+</html>

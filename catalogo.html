@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalles y Regalos Encantos Eternos — Florería</title>
+  <meta name="description" content="Florería en Perú. Ramos, arreglos y regalos para cada momento especial. Crea tu arreglo personalizado." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/public.css" />
+  <link rel="icon" type="image/png" href="icon/favicon.png">
+  <script>
+    if (localStorage.getItem('ee_dark') === '1') document.documentElement.classList.add('dark-mode-pre');
+  </script>
+  <style>
+    /* ── Ajustes catálogo fusionado ── */
+    .section-eyebrow { margin-bottom: .75rem; }
+
+    /* Tarjetas de receta para catálogo público */
+    .recipe-pub-card {
+      background: var(--pub-card);
+      border-radius: var(--r-lg);
+      border: 1.5px solid var(--pub-line);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--ease);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--s-xs);
+    }
+    .recipe-pub-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--s-color);
+      border-color: var(--pink-mid);
+    }
+    .recipe-pub-img {
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+    .recipe-pub-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--ease);
+    }
+    .recipe-pub-card:hover .recipe-pub-img img {
+      transform: scale(1.06);
+    }
+    .recipe-pub-body {
+      padding: 1.25rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .recipe-pub-cat {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 5px;
+    }
+    .recipe-pub-name {
+      font-family: var(--display);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink-900);
+      margin-bottom: 7px;
+      line-height: 1.35;
+    }
+    .recipe-pub-desc {
+      font-size: 12px;
+      color: var(--ink-500);
+      margin-bottom: 14px;
+      flex: 1;
+      line-height: 1.65;
+    }
+    .recipe-pub-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .recipe-pub-price {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      background: var(--g-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .recipe-pub-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(8px);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: var(--r-pill);
+      color: #15803d;
+      box-shadow: var(--s-xs);
+    }
+    /* Loading skeleton */
+    .skeleton-card {
+      background: var(--pub-card);
+      border-radius: var(--r-lg);
+      border: 1.5px solid var(--pub-line);
+      overflow: hidden;
+      animation: shimmer 1.5s ease-in-out infinite;
+    }
+    .skeleton-img  { height: 200px; background: linear-gradient(90deg, var(--pub-line) 25%, var(--pub-line-mid) 50%, var(--pub-line) 75%); background-size: 200% 100%; }
+    .skeleton-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 10px; }
+    .skeleton-line { height: 12px; border-radius: 6px; background: var(--pub-line); }
+    .skeleton-line.w-60 { width: 60%; }
+    .skeleton-line.w-40 { width: 40%; }
+    @keyframes shimmer { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+    /* Filtros chips scroll en móvil */
+    .chips-scroll {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2.75rem;
+    }
+    @media (max-width: 640px) {
+      .chips-scroll {
+        overflow-x: auto;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+        margin-left: -1.25rem;
+        margin-right: -1.25rem;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+      }
+      .chips-scroll .chip { flex-shrink: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Splash -->
+<div id="splash">
+  <div class="contenido-splash">
+    <img src="icon/splash.png" alt="Logo">
+  </div>
+</div>
+
+<!-- PETAL MARQUEE BAR -->
+<div class="petal-bar">
+  <div class="petal-track">
+    <span class="petal-item">Entrega a domicilio <span>🌸</span></span>
+    <span class="petal-item">Arreglos personalizados <span>💐</span></span>
+    <span class="petal-item">Yape · Plin · Efectivo <span>🌷</span></span>
+    <span class="petal-item">Sicuani, Cusco <span>🌺</span></span>
+    <span class="petal-item">WhatsApp: +51 972 542 802 <span>🌻</span></span>
+    <span class="petal-item">Entrega a domicilio <span>🌸</span></span>
+    <span class="petal-item">Arreglos personalizados <span>💐</span></span>
+    <span class="petal-item">Yape · Plin · Efectivo <span>🌷</span></span>
+    <span class="petal-item">Sicuani, Cusco <span>🌺</span></span>
+    <span class="petal-item">WhatsApp: +51 972 542 802 <span>🌻</span></span>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar-pub" id="navbar">
+  <div class="navbar-brand">
+    <img src="icon/logo.png" alt="logo">
+    <div class="brand-text">
+      <span class="brand-name">Detalles y Regalos Encantos Eternos</span>
+      <span class="brand-subtitle">Florería · Sicuani, Cusco — Perú</span>
+    </div>
+  </div>
+  <ul class="navbar-links">
+    <li><a href="#catalogo">Catálogo</a></li>
+    <li><a href="#" onclick="event.preventDefault();abrirLaboratorioModal()">Crea tu arreglo</a></li>
+    <li><a href="#promociones">Promociones</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <button class="btn-dark-toggle" id="btn-dark" onclick="toggleDark()" title="Modo oscuro" aria-label="Cambiar tema">🌙</button>
+    <a href="index.html" class="btn btn-outline btn-sm hide-on-small">Panel Admin</a>
+    <button class="btn-menu-mob" onclick="toggleMobileNav()" id="btn-menu" aria-label="Menú">☰</button>
+  </div>
+</nav>
+
+<!-- Mobile nav overlay -->
+<div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileNav()"></div>
+<div class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav-header">
+    <span class="mobile-nav-title">Menú</span>
+    <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Cerrar menú">×</button>
+  </div>
+  <a href="#catalogo"    onclick="closeMobileNav()">🌹 Catálogo</a>
+  <a href="#" onclick="event.preventDefault();closeMobileNav();abrirLaboratorioModal()">🌸 Crea tu arreglo</a>
+  <a href="#promociones" onclick="closeMobileNav()">🎁 Promociones</a>
+  <a href="#contacto"    onclick="closeMobileNav()">📍 Contacto</a>
+  <a href="index.html">🔐 Panel Admin →</a>
+</div>
+
+<!-- HERO CAROUSEL -->
+<section class="hero-carousel">
+  <div class="hero-carousel-container">
+    <div class="hero-carousel-track" id="hero-track">
+      <div class="hero-slide active">
+        <div class="hero-slide-bg" style="background-image:url('https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1920&q=80')"></div>
+        <div class="hero-slide-overlay"></div>
+        <div class="hero-slide-content">
+          <div class="container">
+            <div class="hero-slide-text">
+              <h1 class="hero-slide-title">Sorprende con<br><span class="hero-slide-highlight">Hermosos</span><br>y coloridos <span class="hero-slide-highlight">Tulipanes</span></h1>
+              <a href="#catalogo" class="btn-hero-cta">VER CATÁLOGO</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-slide">
+        <div class="hero-slide-bg" style="background-image:url('https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=1920&q=80')"></div>
+        <div class="hero-slide-overlay"></div>
+        <div class="hero-slide-content">
+          <div class="container">
+            <div class="hero-slide-text">
+              <h1 class="hero-slide-title">Expresa tu amor con<br><span class="hero-slide-highlight">Rosas</span><br>frescas y elegantes</h1>
+              <a href="#catalogo" class="btn-hero-cta">VER CATÁLOGO</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-slide">
+        <div class="hero-slide-bg" style="background-image:url('https://images.unsplash.com/photo-1487070183336-b863922373d4?w=1920&q=80')"></div>
+        <div class="hero-slide-overlay"></div>
+        <div class="hero-slide-content">
+          <div class="container">
+            <div class="hero-slide-text">
+              <h1 class="hero-slide-title">Crea tu<br><span class="hero-slide-highlight">Arreglo</span><br>personalizado</h1>
+              <button onclick="abrirLaboratorioModal()" class="btn-hero-cta">DISEÑA AHORA</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="hero-carousel-btn hero-carousel-prev" onclick="moverHeroSlide(-1)" aria-label="Anterior">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="hero-carousel-btn hero-carousel-next" onclick="moverHeroSlide(1)" aria-label="Siguiente">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <div class="hero-carousel-indicators" id="hero-indicators">
+      <button class="hero-indicator active" onclick="irAHeroSlide(0)"></button>
+      <button class="hero-indicator" onclick="irAHeroSlide(1)"></button>
+      <button class="hero-indicator" onclick="irAHeroSlide(2)"></button>
+    </div>
+  </div>
+  <div class="hero-trust">
+    <div class="trust-item"><span class="trust-dot" style="background:#4ade80"></span>Flores frescas garantizadas</div>
+    <div class="trust-item"><span class="trust-dot" style="background:#ec4899"></span>Arreglos personalizados</div>
+    <div class="trust-item"><span class="trust-dot" style="background:#a855f7"></span>Envío el mismo día</div>
+    <div class="trust-item"><span class="trust-dot" style="background:#f97316"></span>Múltiples formas de pago</div>
+  </div>
+</section>
+
+<!-- CATÁLOGO (Recetas con imagen) -->
+<section class="section section-alt" id="catalogo">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">🌸 Nuestros arreglos</span>
+      <h2>Para cada momento especial</h2>
+      <p>Explora nuestra colección de arreglos florales, creados con amor desde Sicuani.</p>
+    </div>
+
+    <!-- Chips de categoría -->
+    <div class="chips-scroll" id="cat-chips">
+      <button class="chip active" onclick="filtrarCategoria(this,'')">Todos</button>
+      <!-- Se llenan dinámicamente -->
+    </div>
+
+    <!-- Grid de recetas -->
+    <div class="products-grid" id="recipes-grid">
+      <!-- Skeletons iniciales -->
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line w-60"></div><div class="skeleton-line w-40"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line w-60"></div><div class="skeleton-line w-40"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line w-60"></div><div class="skeleton-line w-40"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line w-60"></div><div class="skeleton-line w-40"></div></div></div>
+    </div>
+
+    <!-- Paginación -->
+    <div class="products-nav" id="recipes-nav" style="display:none">
+      <button onclick="prevPage()" class="btn btn-ghost btn-sm">⬅ Anterior</button>
+      <span id="page-info" style="font-size:13px;color:var(--ink-500);font-weight:500"></span>
+      <button onclick="nextPage()" class="btn btn-ghost btn-sm">Siguiente ➡</button>
+    </div>
+  </div>
+</section>
+
+<!-- LABORATORIO -->
+<section class="section" id="laboratorio" style="padding-top:3rem">
+  <div class="container">
+    <div class="lab-cta-card">
+      <span class="lab-cta-icon">🌸</span>
+      <h2 class="lab-cta-title">Diseña tu arreglo ideal</h2>
+      <p class="lab-cta-desc">Elige las flores y materiales que quieras y crea un arreglo único y personalizado. Te mostramos el precio estimado al instante.</p>
+      <div class="lab-cta-features">
+        <div class="lab-cta-feature"><span class="lab-cta-feature-icon">🌹</span><span>Flores frescas del día</span></div>
+        <div class="lab-cta-feature"><span class="lab-cta-feature-icon">🎨</span><span>Colores a tu gusto</span></div>
+        <div class="lab-cta-feature"><span class="lab-cta-feature-icon">📱</span><span>Pide por WhatsApp</span></div>
+      </div>
+      <button class="btn btn-primary btn-lg" onclick="abrirLaboratorioModal()">
+        🌸 Crear mi arreglo personalizado
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- PROMOCIONES -->
+<section class="section section-alt" id="promociones">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Ofertas especiales</span>
+      <h2>Promociones vigentes</h2>
+      <p>Aprovecha nuestras ofertas y consigue más por menos.</p>
+    </div>
+    <div class="promo-grid" id="promo-grid">
+      <div style="text-align:center;padding:2rem;color:#b8a8c8;font-size:14px">Cargando promociones...</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="section" id="contacto">
+  <div class="container" style="display:flex;justify-content:center">
+    <div class="contact-card">
+      <div style="font-size:48px;margin-bottom:1rem">💐</div>
+      <h3 style="font-family:var(--display);font-size:22px;font-weight:700;color:var(--ink-900);margin-bottom:.75rem">¿Listo para ordenar?</h3>
+      <p style="font-size:14px;color:var(--ink-500);margin-bottom:1.5rem;line-height:1.7">Escríbenos por WhatsApp y te atendemos al instante. Realizamos entregas en Sicuani y alrededores.</p>
+      <a href="https://wa.me/51972542802" target="_blank" class="btn btn-primary btn-lg" style="width:100%;justify-content:center">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Escribir por WhatsApp
+      </a>
+      <div style="margin-top:1rem;font-size:12px;color:var(--ink-300)">📍 Sicuani, Cusco — Perú</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-grid">
+      <div class="footer-col footer-col-main">
+        <div class="footer-brand">
+          <img src="icon/logo.png" alt="Encantos Eternos" class="footer-logo">
+          <span class="footer-brand-text">Detalles y Regalos<br>Encantos Eternos</span>
+        </div>
+        <p class="footer-desc">Florería peruana especializada en arreglos florales únicos para cada momento especial. Con sede en Sicuani, Cusco.</p>
+        <div class="footer-contact-buttons">
+          <a href="https://wa.me/51972542802" target="_blank" class="footer-btn footer-btn-whatsapp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            WhatsApp
+          </a>
+          <a href="tel:+51972542802" class="footer-btn footer-btn-phone">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Llamar
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-title">Horario de atención</h4>
+        <ul class="footer-schedule">
+          <li><span class="schedule-day">Lunes - Viernes</span><span class="schedule-time">9:00 AM - 7:00 PM</span></li>
+          <li><span class="schedule-day">Sábados</span><span class="schedule-time">9:00 AM - 6:00 PM</span></li>
+          <li><span class="schedule-day">Domingos</span><span class="schedule-time">10:00 AM - 2:00 PM</span></li>
+        </ul>
+        <div class="footer-location">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Sicuani, Cusco - Perú</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <div class="footer-copyright">
+          <img src="icon/ih.png" alt="Inversiones Hasbun" class="footer-company-logo">
+          <span>© 2026 Inversiones Hasbun SRL. Todos los derechos reservados.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp float -->
+<a href="https://wa.me/51972542802" target="_blank" class="wa-float" title="Escríbenos por WhatsApp">
+  <img src="icon/wasap2.png" alt="WhatsApp" style="width:32px;height:32px;object-fit:contain">
+</a>
+
+<!-- MODAL LABORATORIO (copiado de prubagoty/index.html) -->
+<div class="modal-overlay" id="laboratorioModal">
+  <div class="modal-laboratorio">
+    <div class="modal-lab-header">
+      <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);width:40px;height:4px;background:var(--pub-line-mid);border-radius:999px;display:none" class="modal-drag-indicator"></div>
+      <h3>🌸 Laboratorio de Flores</h3>
+      <button class="btn-close-lab" onclick="cerrarLaboratorioModal()" aria-label="Cerrar modal">×</button>
+    </div>
+    <div class="modal-lab-body">
+      <p class="lab-modal-intro">Crea tu arreglo personalizado seleccionando las flores y materiales disponibles</p>
+      <div class="lab-modal-filters">
+        <button class="lab-filter-btn active" onclick="filtrarLabCategoria('destacados')" id="filter-destacados-modal">⭐ Destacados</button>
+        <button class="lab-filter-btn" onclick="filtrarLabCategoria('flores')" id="filter-flores-modal">🌹 Flores</button>
+        <button class="lab-filter-btn" onclick="filtrarLabCategoria('materiales')" id="filter-materiales-modal">📦 Materiales</button>
+        <button class="lab-filter-btn" onclick="filtrarLabCategoria('accesorios')" id="filter-accesorios-modal">🎀 Accesorios</button>
+        <button class="lab-filter-btn" onclick="filtrarLabCategoria('todos')" id="filter-todos-modal">🌸 Ver todos</button>
+      </div>
+      <div class="lab-section-title" id="lab-categoria-titulo">⭐ Destacados</div>
+      <div class="lab-modal-content">
+        <div class="lab-flores-grid" id="lab-flores-grid"></div>
+        <div class="lab-resumen-modal">
+          <div class="lab-resumen-title">🌸 Tu arreglo</div>
+          <div id="lab-items-list">
+            <div style="color:#b8a8c8;font-size:13px;text-align:center;padding:2.5rem 0;line-height:1.8;font-family:'Poppins',sans-serif">
+              Selecciona flores para<br>comenzar tu arreglo
+            </div>
+          </div>
+          <div style="border-top:1px solid #f0e8f5;padding-top:16px;margin-top:6px">
+            <div class="lab-total">
+              <span>Precio estimado:</span>
+              <span class="lab-precio-total" id="lab-precio-pub">S/ 0.00</span>
+            </div>
+            <div style="font-size:11px;color:#b8a8c8;margin-bottom:1.35rem;margin-top:5px;font-family:'Poppins',sans-serif">
+              * Precio orientativo, incluye margen estándar
+            </div>
+            <button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="pedirPorWhatsApp()">📱 Pedir por WhatsApp</button>
+            <button class="btn btn-ghost" style="width:100%" onclick="limpiarLabPub()">Limpiar selección</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="js/main.js"></script>
+<script>
+  /* ════════════════════════════════════════
+     CATÁLOGO BASADO EN RECETAS CON IMAGEN
+     Solo muestra recetas donde image_url != null
+  ════════════════════════════════════════ */
+  const API_BASE_CAT = 'https://system-enterprise.onrender.com/api/v1';
+
+  let todasRecetas = [];   // Recetas con imagen cargadas
+  let catActualCat = '';   // Categoría seleccionada
+  let paginaActual = 0;
+  const POR_PAGINA = 8;
+
+  async function cargarRecetasCatalogo() {
+    try {
+      const res = await fetch(`${API_BASE_CAT}/catalog/recipes`, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!res.ok) throw new Error('Error al cargar recetas');
+      const data = await res.json();
+      // El backend ya filtra show_in_catalog=true, is_active=true y sin deleted_at
+      todasRecetas = (data.data || data || []).filter(r =>
+        r.image_url &&
+        r.image_url.trim() !== '' &&
+        r.image_url !== 'null'
+      );
+
+      construirFiltrosCategorias();
+      renderRecetasCatalogo();
+    } catch (e) {
+      console.warn('No se pudo cargar recetas desde API, usando fallback', e);
+      todasRecetas = [];
+      renderRecetasCatalogo();
+    }
+  }
+
+  function construirFiltrosCategorias() {
+    const cats = [...new Set(todasRecetas.map(r => r.category_name).filter(Boolean))];
+    const chips = document.getElementById('cat-chips');
+    // Mantener el "Todos" y agregar categorías dinámicas
+    chips.innerHTML = `<button class="chip active" onclick="filtrarCategoria(this,'')">Todos</button>` +
+      cats.map(cat => `<button class="chip" onclick="filtrarCategoria(this,'${cat}')">${cat}</button>`).join('');
+  }
+
+  function filtrarCategoria(el, cat) {
+    document.querySelectorAll('#cat-chips .chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    catActualCat = cat;
+    paginaActual = 0;
+    renderRecetasCatalogo();
+  }
+
+  function renderRecetasCatalogo() {
+    const grid = document.getElementById('recipes-grid');
+    const nav  = document.getElementById('recipes-nav');
+    const lista = catActualCat
+      ? todasRecetas.filter(r => r.category_name === catActualCat)
+      : todasRecetas;
+
+    if (!lista.length) {
+      grid.innerHTML = `
+        <div style="text-align:center;padding:3rem;color:#b8a8c8;grid-column:1/-1;font-family:Poppins,sans-serif">
+          <div style="font-size:48px;margin-bottom:1rem">🌸</div>
+          <p style="font-size:15px">Próximamente nuevos arreglos con imagen</p>
+          <p style="font-size:13px;margin-top:.5rem">Mientras tanto, <button onclick="abrirLaboratorioModal()" style="background:none;border:none;color:var(--pink);font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;text-decoration:underline">crea tu arreglo personalizado</button></p>
+        </div>`;
+      nav.style.display = 'none';
+      return;
+    }
+
+    const inicio = paginaActual * POR_PAGINA;
+    const items  = lista.slice(inicio, inicio + POR_PAGINA);
+    const totalPags = Math.ceil(lista.length / POR_PAGINA);
+
+    grid.innerHTML = items.map(r => {
+      const precio = r.suggested_price ? `S/ ${parseFloat(r.suggested_price).toFixed(2)}` : null;
+      const nombre = r.name || 'Arreglo floral';
+      const desc = r.description || '';
+      const cat  = r.category_name || '';
+      const safe = nombre.replace(/'/g, "\\'");
+
+      return `
+        <div class="recipe-pub-card" onclick="pedirReceta('${safe}',${r.suggested_price||0})">
+          <div class="recipe-pub-img">
+            <img src="${r.image_url}"
+                 alt="${nombre}"
+                 loading="lazy"
+                 onerror="this.closest('.recipe-pub-card').style.display='none'">
+            ${precio ? `<div class="recipe-pub-badge">Precio referencial</div>` : ''}
+          </div>
+          <div class="recipe-pub-body">
+            ${cat ? `<div class="recipe-pub-cat">${cat}</div>` : ''}
+            <div class="recipe-pub-name">${nombre}</div>
+            ${desc ? `<div class="recipe-pub-desc">${desc}</div>` : '<div class="recipe-pub-desc"></div>'}
+            <div class="recipe-pub-footer">
+              ${precio ? `<div class="recipe-pub-price">${precio}</div>` : '<div></div>'}
+              <button class="btn-pedir" onclick="event.stopPropagation();pedirReceta('${safe}',${r.suggested_price||0})">
+                Pedir 📱
+              </button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Paginación
+    if (totalPags > 1) {
+      nav.style.display = 'flex';
+      document.getElementById('page-info').textContent = `Página ${paginaActual + 1} de ${totalPags}`;
+    } else {
+      nav.style.display = 'none';
+    }
+  }
+
+  function nextPage() {
+    const lista = catActualCat ? todasRecetas.filter(r => r.category_name === catActualCat) : todasRecetas;
+    const grid = document.getElementById('recipes-grid');
+    if ((paginaActual + 1) * POR_PAGINA < lista.length) {
+      grid.style.opacity = '0';
+      grid.style.transform = 'translateX(-30px)';
+      setTimeout(() => {
+        paginaActual++;
+        renderRecetasCatalogo();
+        grid.style.transition = 'none';
+        grid.style.opacity = '0';
+        grid.style.transform = 'translateX(30px)';
+        requestAnimationFrame(() => {
+          grid.style.transition = 'opacity .3s ease, transform .3s ease';
+          grid.style.opacity = '1';
+          grid.style.transform = 'translateX(0)';
+        });
+        window.scrollTo({ top: document.getElementById('catalogo').offsetTop - 80, behavior: 'smooth' });
+      }, 200);
+    }
+  }
+
+  function prevPage() {
+    const grid = document.getElementById('recipes-grid');
+    if (paginaActual > 0) {
+      grid.style.opacity = '0';
+      grid.style.transform = 'translateX(30px)';
+      setTimeout(() => {
+        paginaActual--;
+        renderRecetasCatalogo();
+        grid.style.transition = 'none';
+        grid.style.opacity = '0';
+        grid.style.transform = 'translateX(-30px)';
+        requestAnimationFrame(() => {
+          grid.style.transition = 'opacity .3s ease, transform .3s ease';
+          grid.style.opacity = '1';
+          grid.style.transform = 'translateX(0)';
+        });
+        window.scrollTo({ top: document.getElementById('catalogo').offsetTop - 80, behavior: 'smooth' });
+      }, 200);
+    }
+  }
+
+  function pedirReceta(nombre, precio) {
+    const p = parseFloat(precio);
+    const msg = precio > 0
+      ? `🌸 ¡Hola! Vi el arreglo *"${nombre}"* en su catálogo.\n\n💰 Precio referencial: S/ ${p.toFixed(2)}\n\n¿Tienen disponibilidad? ¿Cuáles son los tiempos de entrega?`
+      : `🌸 ¡Hola! Vi el arreglo *"${nombre}"* en su catálogo y me interesa pedirlo. ¿Cuál es el precio y disponibilidad?`;
+    window.open(`https://wa.me/51972542802?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  /* ── PROMOCIONES ── */
+  function cargarPromos() {
+    renderPromos([]);
+  }
+
+  function renderPromos(promos) {
+    const grid = document.getElementById('promo-grid');
+    if (!promos.length) {
+      grid.innerHTML = '<div style="text-align:center;padding:3rem;color:#b8a8c8;font-size:15px"><div style="font-size:48px;margin-bottom:1rem">🎁</div>No hay promociones activas actualmente</div>';
+      return;
+    }
+    grid.innerHTML = promos.map(p => {
+      const fechaHasta = p.fecha_hasta ? new Date(p.fecha_hasta) : null;
+      const diasRestantes = fechaHasta ? Math.ceil((fechaHasta - new Date()) / 86400000) : null;
+      return `
+        <div class="promo-card-modern">
+          ${p.descuento > 0 ? `<div class="promo-badge-corner">-${p.descuento}%</div>` : ''}
+          <div class="promo-icon">${p.tipo==='2x1'?'🎉':p.tipo==='regalo'?'🎁':p.tipo==='precio_fijo'?'💰':'✨'}</div>
+          <h3 class="promo-title-modern">${p.titulo}</h3>
+          ${p.descripcion ? `<p class="promo-desc-modern">${p.descripcion}</p>` : ''}
+          ${p.descuento > 0 ? `<div class="promo-discount-badge"><span class="discount-number">${p.descuento}%</span><span class="discount-text">DESCUENTO</span></div>` : ''}
+          ${diasRestantes !== null ? `<div class="promo-validity ${diasRestantes<=3?'urgent':''}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${diasRestantes===0?'¡Último día!':diasRestantes===1?'¡Termina mañana!':diasRestantes<=3?`¡Solo ${diasRestantes} días!`:`Válido hasta ${fechaHasta.toLocaleDateString('es-PE',{day:'numeric',month:'long'})}`}
+          </div>` : ''}
+          <button class="btn-promo-cta" onclick="solicitarPromo('${p.titulo.replace(/'/g,"\\'")}')" >
+            <span>Aprovechar oferta</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>`;
+    }).join('');
+  }
+
+  function solicitarPromo(titulo) {
+    window.open(`https://wa.me/51972542802?text=${encodeURIComponent(`¡Hola! 🌸 Me interesa la promoción: *${titulo}*`)}`, '_blank');
+  }
+
+  /* ── LABORATORIO ── */
+  const ITEMS_DESTACADOS = ['Rosas rojas','Rosas rosadas','Girasoles','Papel decorativo','Cinta satinada','Caja decorativa'];
+  const FLORES_EMOJI_PUB = {'Rosas rojas':'🌹','Lirios blancos':'🤍','Girasoles':'🌻','Rosas rosadas':'🌸','Tulipanes':'🌷','Margaritas':'🌼','Orquídeas':'🌺'};
+  const TIPO_EMOJI_PUB = {flores:'🌸',materiales:'🎀',accesorios:'🎁'};
+  let inventarioPub = [], selLab = {}, categoriaLabActual = 'destacados';
+
+  async function cargarInventarioPub() {
+    inventarioPub = [
+      {id:1,nombre:'Rosas rojas',tipo:'flores',stock:45,costo:3.5},
+      {id:2,nombre:'Lirios blancos',tipo:'flores',stock:8,costo:2.8},
+      {id:3,nombre:'Girasoles',tipo:'flores',stock:25,costo:2.0},
+      {id:4,nombre:'Rosas rosadas',tipo:'flores',stock:30,costo:3.0},
+      {id:5,nombre:'Tulipanes',tipo:'flores',stock:20,costo:3.2},
+      {id:6,nombre:'Papel decorativo',tipo:'materiales',stock:5,costo:8.5},
+      {id:7,nombre:'Cinta satinada',tipo:'materiales',stock:12,costo:4.0},
+      {id:8,nombre:'Caja decorativa',tipo:'accesorios',stock:7,costo:12.0},
+    ];
+    renderLabPub();
+  }
+
+  function renderLabPub() {
+    const grid = document.getElementById('lab-flores-grid');
+    let items = inventarioPub;
+    if (categoriaLabActual === 'destacados') items = inventarioPub.filter(i => ITEMS_DESTACADOS.includes(i.nombre));
+    else if (categoriaLabActual !== 'todos') items = inventarioPub.filter(i => i.tipo === categoriaLabActual);
+    if (!items.length) { grid.innerHTML='<div style="text-align:center;padding:3rem;color:#b8a8c8;font-size:14px;grid-column:1/-1">No hay items en esta categoría</div>'; return; }
+    grid.innerHTML = items.map(item => {
+      const qty = selLab[item.id]||0;
+      const emoji = FLORES_EMOJI_PUB[item.nombre]||TIPO_EMOJI_PUB[item.tipo]||'🌸';
+      return `<div class="lab-flor-card ${qty>0?'selected':''}">
+        <div class="lab-flor-emoji">${emoji}</div>
+        <div class="lab-flor-name">${item.nombre}</div>
+        <div class="lab-flor-precio">S/ ${parseFloat(item.costo).toFixed(2)} c/u</div>
+        <div class="lab-flor-stock">Stock: ${item.stock}</div>
+        <div class="lab-qty-ctrl">
+          <button class="lab-qty-btn" onclick="cambiarQtyPub(${item.id},-1)">−</button>
+          <span class="lab-qty-num">${qty}</span>
+          <button class="lab-qty-btn" onclick="cambiarQtyPub(${item.id},1)">+</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function filtrarLabCategoria(cat) {
+    categoriaLabActual = cat;
+    document.querySelectorAll('.lab-filter-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('filter-'+cat+'-modal');
+    if (btn) btn.classList.add('active');
+    const titulos = {destacados:'⭐ Destacados',flores:'🌹 Flores',materiales:'📦 Materiales',accesorios:'🎀 Accesorios',todos:'🌸 Todos los productos'};
+    const tEl = document.getElementById('lab-categoria-titulo');
+    if (tEl) tEl.textContent = titulos[cat]||'🌸 Productos';
+    renderLabPub();
+  }
+
+  function cambiarQtyPub(id, delta) {
+    const item = inventarioPub.find(i=>i.id==id); if(!item)return;
+    const nuevo = Math.max(0,Math.min(item.stock,(selLab[id]||0)+delta));
+    if(nuevo===0)delete selLab[id];else selLab[id]=nuevo;
+    renderLabPub();renderResumenPub();
+  }
+
+  function renderResumenPub() {
+    const ids = Object.keys(selLab);
+    const el = document.getElementById('lab-items-list');
+    if(!ids.length){el.innerHTML='<div style="color:#b8a8c8;font-size:13px;text-align:center;padding:2.5rem 0;line-height:1.8;font-family:Poppins,sans-serif">Selecciona flores para<br>comenzar tu arreglo</div>';document.getElementById('lab-precio-pub').textContent='S/ 0.00';return;}
+    let costo=0;
+    el.innerHTML=ids.map(id=>{const item=inventarioPub.find(i=>i.id==id);if(!item)return'';const sub=parseFloat(item.costo)*selLab[id];costo+=sub;return`<div class="lab-item"><span>${item.nombre} × ${selLab[id]}</span><span>S/ ${sub.toFixed(2)}</span></div>`;}).join('');
+    document.getElementById('lab-precio-pub').textContent=`S/ ${(costo/0.6).toFixed(2)}`;
+  }
+
+  function limpiarLabPub(){selLab={};renderLabPub();renderResumenPub();}
+
+  function pedirPorWhatsApp(){
+    const ids=Object.keys(selLab);if(!ids.length){alert('Selecciona flores primero');return;}
+    const flores=ids.map(id=>({nombre:inventarioPub.find(i=>i.id==id).nombre,cantidad:selLab[id]}));
+    const precio=parseFloat(document.getElementById('lab-precio-pub').textContent.replace('S/ ',''));
+    const lineas=flores.map(f=>`- ${f.nombre} × ${f.cantidad}`).join('\n');
+    const msg=`🌸 ¡Hola! Quiero hacer un arreglo personalizado:\n\n${lineas}\n\n💰 Precio estimado: S/ ${precio.toFixed(2)}\n\n¿Pueden prepararlo?`;
+    window.open(`https://wa.me/51972542802?text=${encodeURIComponent(msg)}`,'_blank');
+  }
+
+  function abrirLaboratorioModal(){
+    const modal=document.getElementById('laboratorioModal');
+    modal.classList.remove('closing');modal.classList.add('active');
+    if(!inventarioPub.length)cargarInventarioPub();
+    document.body.style.overflow='hidden';
+  }
+
+  function cerrarLaboratorioModal(){
+    const modal=document.getElementById('laboratorioModal');
+    modal.classList.add('closing');
+    setTimeout(()=>{modal.classList.remove('active','closing');document.body.style.overflow='';},250);
+  }
+
+  document.addEventListener('click',e=>{const m=document.getElementById('laboratorioModal');if(e.target===m)cerrarLaboratorioModal();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){const m=document.getElementById('laboratorioModal');if(m&&m.classList.contains('active'))cerrarLaboratorioModal();}});
+
+  /* ── NAVBAR ── */
+  function toggleMobileNav(){
+    const nav=document.getElementById('mobile-nav'),overlay=document.getElementById('mobile-nav-overlay');
+    if(nav.classList.contains('open')){closeMobileNav();}else{nav.classList.add('open');overlay.classList.add('open');document.body.style.overflow='hidden';}
+  }
+  function closeMobileNav(){
+    document.getElementById('mobile-nav').classList.remove('open');
+    document.getElementById('mobile-nav-overlay').classList.remove('open');
+    document.body.style.overflow='';
+  }
+  window.addEventListener('scroll',()=>{document.getElementById('navbar').style.boxShadow=window.scrollY>10?'0 4px 20px rgba(168,85,247,.10)':'none';});
+
+  /* ── HERO CAROUSEL ── */
+  let heroIdx=0, heroTimer;
+  const slides=document.querySelectorAll('.hero-slide');
+  const indics=document.querySelectorAll('.hero-indicator');
+  function mostrarHeroSlide(i){heroIdx=((i%slides.length)+slides.length)%slides.length;slides.forEach((s,j)=>s.classList.toggle('active',j===heroIdx));indics.forEach((d,j)=>d.classList.toggle('active',j===heroIdx));}
+  function moverHeroSlide(d){mostrarHeroSlide(heroIdx+d);clearInterval(heroTimer);heroTimer=setInterval(()=>mostrarHeroSlide(heroIdx+1),5000);}
+  function irAHeroSlide(i){mostrarHeroSlide(i);clearInterval(heroTimer);heroTimer=setInterval(()=>mostrarHeroSlide(heroIdx+1),5000);}
+  mostrarHeroSlide(0);
+  heroTimer=setInterval(()=>mostrarHeroSlide(heroIdx+1),5000);
+  document.querySelector('.hero-carousel-container')?.addEventListener('mouseenter',()=>clearInterval(heroTimer));
+  document.querySelector('.hero-carousel-container')?.addEventListener('mouseleave',()=>{heroTimer=setInterval(()=>mostrarHeroSlide(heroIdx+1),5000);});
+
+  /* ── DARK MODE ── */
+  function toggleDark(){document.body.classList.toggle('dark-mode');localStorage.setItem('ee_dark',document.body.classList.contains('dark-mode')?'1':'0');const b=document.getElementById('btn-dark');if(b)b.textContent=document.body.classList.contains('dark-mode')?'☀️':'🌙';}
+  if(localStorage.getItem('ee_dark')==='1'){document.body.classList.add('dark-mode');document.addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('btn-dark');if(b)b.textContent='☀️';});}
+
+  /* ── SPLASH ── */
+  window.addEventListener('load', () => {
+    const s = document.getElementById('splash');
+    if (s) { setTimeout(() => { s.style.transition='opacity .6s ease'; s.style.opacity='0'; setTimeout(()=>s.remove(),600); }, 1000); }
+  });
+
+  /* ── INIT ── */
+  cargarRecetasCatalogo();
+  cargarPromos();
+</script>
+</body>
+</html>

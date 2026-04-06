@@ -1,0 +1,520 @@
+/* =============================================
+   FUSION OVERRIDES v2
+   Solo tokens de color/tipografía — NO redefine
+   layout ni componentes que ya funcionan en
+   styles-admin-components.css
+   ============================================= */
+
+/* ──────────────────────────────────────────────
+   1. REMAPEAR TOKENS DEL ADMIN AL SISTEMA PRUBAGOTY
+   El admin usa --accent, --bg-base, --text-primary, etc.
+   Los mapeamos a los valores de prubagoty.
+────────────────────────────────────────────── */
+:root {
+  /* Color principal del admin → rosa prubagoty */
+  --accent:        #FF3D8A;
+  --accent-light:  #FF6BA8;
+  --accent-dark:   #C41565;
+
+  /* Superficies claras */
+  --bg-base:       #FFFEF5;
+  --bg-surface:    #FFFFFF;
+  --bg-elevated:   #FFF5F9;
+  --bg-card:       #FFFFFF;
+
+  /* Bordes */
+  --border:        rgba(255,61,138,.18);
+  --border-light:  rgba(255,61,138,.10);
+
+  /* Texto */
+  --text-primary:  #252222;
+  --text-secondary:#504C4C;
+  --text-muted:    #A09C9C;
+
+  /* Semánticos */
+  --green:   #22C55E;
+  --yellow:  #F97316;
+  --blue:    #60a5fa;
+  --purple:  #A855F7;
+  --red:     #EF4444;
+  --rose:    #FF6BA8;
+
+  /* Tipografía */
+  --font-sans: 'Jost', system-ui, sans-serif;
+  --font-mono: 'DM Mono', 'Fira Code', monospace;
+
+  /* Radios y sombras (alias) */
+  --radius:    12px;
+  --radius-lg: 18px;
+  --shadow:    0 4px 16px rgba(255,61,138,.10), 0 2px 6px rgba(0,0,0,.06);
+  --shadow-sm: 0 2px 8px rgba(255,61,138,.07), 0 1px 3px rgba(0,0,0,.05);
+  --transition: 220ms cubic-bezier(.4,0,.2,1);
+
+  /* Para compatibilidad con variables de prubagoty usadas inline */
+  --rosa-500: #FF3D8A;
+  --rosa-400: #FF6BA8;
+  --rosa-200: #FFC9E1;
+  --rosa-100: #FFE4F0;
+  --rosa-50:  #FFF5F9;
+  --verde-500:#22C55E;
+  --verde-600:#16A34A;
+  --verde-100:#DCFCE7;
+  --verde-200:#BBF7D0;
+  --verde-700:#15803D;
+  --verde-300:#86EFAC;
+  --naranja-500:#F97316;
+  --dorado-500: #FFC107;
+  --dorado-200: #FFF0B3;
+  --morado-500: #A855F7;
+  --morado-300: #D8B4FE;
+  --gris-900: #151313;
+  --gris-800: #252222;
+  --gris-700: #3A3636;
+  --gris-600: #504C4C;
+  --gris-500: #736F6F;
+  --gris-400: #A09C9C;
+  --gris-300: #C9C6C6;
+  --gris-200: #E4E2E2;
+  --gris-100: #F0EFEF;
+  --gris-50:  #F9F9F9;
+  --danger:   #EF4444;
+  --danger-bg:#FEF2F2;
+  --success:  #22C55E;
+  --g-brand:  linear-gradient(135deg, #FF3D8A 0%, #A855F7 100%);
+  --g-warm:   linear-gradient(135deg, #F97316 0%, #FF3D8A 100%);
+  --g-card:   linear-gradient(135deg, #FFFFFF 0%, #FFF5F9 60%, #F9F5FF 100%);
+  --shadow-floral: 0 8px 32px rgba(255,61,138,.14), 0 4px 14px rgba(168,85,247,.10);
+  --shadow-rosa:   0 6px 24px rgba(255,61,138,.30);
+  --shadow-md:  0 4px 16px rgba(255,61,138,.10), 0 2px 6px rgba(0,0,0,.06);
+  --shadow-xl:  0 16px 48px rgba(255,61,138,.16), 0 8px 16px rgba(0,0,0,.08);
+  --shadow-lg:  0 8px 28px rgba(255,61,138,.13), 0 4px 10px rgba(0,0,0,.07);
+  --t-base:    220ms cubic-bezier(.4,0,.2,1);
+  --t-slow:    380ms cubic-bezier(.4,0,.2,1);
+  --t-bounce:  420ms cubic-bezier(.34,1.56,.64,1);
+  --radius-full: 999px;
+  --radius-xl:   26px;
+  --radius-md:   12px;
+  --radius-sm:   8px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Jost', system-ui, sans-serif;
+  --bg-alt:  #FFF5F9;
+}
+
+body.dark-mode {
+  --bg-base:      #0F0A14;
+  --bg-surface:   #1E1428;
+  --bg-elevated:  #160D1E;
+  --bg-card:      #1E1428;
+  --border:       rgba(255,255,255,.10);
+  --border-light: rgba(255,255,255,.06);
+  --text-primary:  #F5F0FF;
+  --text-secondary:#C8BAD8;
+  --text-muted:    #6b5b7a;
+  --gris-900: #F5F0FF;
+  --gris-800: #EDE8F5;
+  --gris-700: #DDD4EC;
+  --gris-600: #C8BAD8;
+  --gris-500: #B0A0C0;
+  --gris-400: #8B7AA0;
+  --gris-300: #5A4470;
+  --gris-200: #3A2A4E;
+  --gris-100: #2A1E38;
+  --gris-50:  #1E1428;
+  --g-card:   linear-gradient(135deg, #1E1428 0%, #221630 60%, #1A1230 100%);
+  --bg-alt:   #160D1E;
+}
+
+/* ──────────────────────────────────────────────
+   2. TIPOGRAFÍA BASE
+────────────────────────────────────────────── */
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-base);
+  color: var(--text-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* ──────────────────────────────────────────────
+   3. SCROLLBAR → ROSA
+────────────────────────────────────────────── */
+::-webkit-scrollbar-thumb { background: var(--rosa-300); }
+::-webkit-scrollbar-thumb:hover { background: var(--rosa-500); }
+
+/* ──────────────────────────────────────────────
+   4. LOGIN PAGE PUB
+────────────────────────────────────────────── */
+.login-page-pub {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #fff5fb 0%, #fdf8ff 50%, #fffaf5 100%);
+  position: relative;
+  overflow: hidden;
+}
+body.dark-mode .login-page-pub {
+  background: linear-gradient(160deg, #160D1E 0%, #1E1428 50%, #160D1E 100%);
+}
+.login-bg-pub { position: absolute; inset: 0; pointer-events: none; }
+.login-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: .18;
+}
+.login-orb-1 {
+  width: 500px; height: 500px;
+  background: linear-gradient(135deg, #FF3D8A, #A855F7);
+  top: -150px; left: -100px;
+}
+.login-orb-2 {
+  width: 350px; height: 350px;
+  background: linear-gradient(135deg, #F97316, #FF3D8A);
+  bottom: -100px; right: -80px;
+}
+.login-card-pub {
+  position: relative;
+  background: var(--bg-card);
+  border: 1.5px solid rgba(255,61,138,.16);
+  border-radius: 26px;
+  padding: 2.75rem 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 16px 48px rgba(255,61,138,.16), 0 8px 16px rgba(0,0,0,.08);
+  z-index: 1;
+  margin: 1rem;
+}
+.login-logo-pub {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255,61,138,.12);
+}
+.login-brand-img {
+  width: 60px; height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 12px rgba(255,61,138,.25));
+}
+.login-brand-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  font-style: italic;
+  background: linear-gradient(135deg, #FF3D8A, #A855F7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.3;
+  display: block;
+}
+.login-brand-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-top: 3px;
+  display: block;
+}
+.form-error {
+  font-size: 12px;
+  color: var(--red);
+  margin-top: 4px;
+  display: block;
+}
+
+/* ──────────────────────────────────────────────
+   5. TOPBAR — ajuste de colores y title
+────────────────────────────────────────────── */
+.topbar {
+  background: var(--bg-card) !important;
+  border-bottom-color: var(--border) !important;
+}
+.topbar .page-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.topbar .page-breadcrumb {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ──────────────────────────────────────────────
+   6. BOTONES — estilos prubagoty sobre clases admin
+────────────────────────────────────────────── */
+.btn-primary {
+  background: linear-gradient(135deg, #FF3D8A 0%, #A855F7 100%) !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 24px rgba(255,61,138,.30) !important;
+  border-radius: 999px !important;
+}
+.btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 28px rgba(255,61,138,.38) !important;
+  filter: brightness(1.05) !important;
+}
+.btn-secondary {
+  background: linear-gradient(135deg, #F97316 0%, #FF3D8A 100%) !important;
+  border-color: transparent !important;
+  border-radius: 999px !important;
+}
+.btn-ghost {
+  border-radius: 999px !important;
+  border-color: var(--gris-200) !important;
+  color: var(--gris-600) !important;
+}
+.btn-ghost:hover {
+  background: var(--rosa-50) !important;
+  border-color: var(--rosa-300) !important;
+  color: var(--rosa-600) !important;
+}
+.btn-danger {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+  border-color: transparent !important;
+  border-radius: 999px !important;
+}
+.btn-success {
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%) !important;
+  border-color: transparent !important;
+  border-radius: 999px !important;
+}
+.btn-warning {
+  background: linear-gradient(135deg, #F97316 0%, #FFC107 100%);
+  color: #fff;
+  border-color: transparent;
+  border-radius: 999px;
+}
+.btn-warning:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+/* Spinner */
+.spinner {
+  border-color: var(--rosa-200) !important;
+  border-top-color: var(--rosa-500) !important;
+}
+
+/* ──────────────────────────────────────────────
+   7. CARDS — fondo gradiente suave prubagoty
+────────────────────────────────────────────── */
+.card {
+  background: var(--g-card) !important;
+  border-color: rgba(255,61,138,.12) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-floral) !important;
+}
+.card:hover {
+  border-color: rgba(255,61,138,.22) !important;
+  box-shadow: var(--shadow-xl) !important;
+}
+
+/* ──────────────────────────────────────────────
+   8. TABS → chips estilo prubagoty
+────────────────────────────────────────────── */
+.tab-btn {
+  border-radius: 999px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 7px 18px;
+  border: 1.5px solid var(--gris-200);
+  background: var(--bg-card);
+  color: var(--gris-600);
+  cursor: pointer;
+  transition: all 220ms;
+}
+.tab-btn:hover {
+  border-color: var(--rosa-300);
+  color: var(--rosa-500);
+  background: var(--rosa-50);
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, #FF3D8A 0%, #A855F7 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 24px rgba(255,61,138,.30);
+}
+
+/* ──────────────────────────────────────────────
+   9. STATUS BADGES
+────────────────────────────────────────────── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+.status-active {
+  background: var(--verde-100);
+  color: var(--verde-700);
+  border: 1px solid var(--verde-200);
+}
+.status-inactive {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+}
+body.dark-mode .status-active   { background: rgba(34,197,94,.15);  color: var(--verde-300); }
+body.dark-mode .status-inactive { background: rgba(239,68,68,.15);  color: #FCA5A5; }
+
+/* ──────────────────────────────────────────────
+   10. STOCK BAR (products table)
+────────────────────────────────────────────── */
+.stock-bar-wrap { display:flex; align-items:center; gap:.5rem; }
+.stock-bar-bg {
+  flex:1; height:5px;
+  background: var(--rosa-100);
+  border-radius: 999px;
+  min-width: 50px;
+}
+.stock-bar-fill { height:5px; border-radius:999px; transition:width .3s; }
+body.dark-mode .stock-bar-bg { background: rgba(255,61,138,.15); }
+
+/* ──────────────────────────────────────────────
+   11. ALERT ITEMS (alerts view)
+────────────────────────────────────────────── */
+.alert-item {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: all var(--transition);
+}
+.alert-item.unread  { border-color: var(--rosa-200); background: rgba(255,61,138,.03); }
+.alert-item.critical{ border-color: #FECACA; background: rgba(239,68,68,.03); }
+.alert-item.warning { border-color: var(--naranja-200, #FED7AA); background: rgba(249,115,22,.03); }
+.alert-icon  { font-size: 20px; flex-shrink: 0; }
+.alert-body  { flex: 1; min-width: 0; }
+.alert-title { font-weight: 600; font-size: 14px; color: var(--text-primary); margin-bottom: 3px; }
+.alert-msg   { font-size: 13px; color: var(--text-secondary); }
+.alert-time  { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.alert-actions { display:flex; gap:6px; flex-shrink:0; }
+
+/* ──────────────────────────────────────────────
+   12. DARK TOGGLE BUTTON (topbar)
+────────────────────────────────────────────── */
+.btn-dark-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 999px;
+  border: 1.5px solid var(--gris-200);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 220ms;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  position: relative;
+}
+.btn-dark-toggle:hover {
+  border-color: var(--rosa-300);
+  background: var(--rosa-50);
+}
+body.dark-mode .btn-dark-toggle {
+  border-color: var(--gris-200);
+  background: var(--bg-card);
+}
+
+/* ──────────────────────────────────────────────
+   13. KPI CARDS → acento rosa
+────────────────────────────────────────────── */
+.kpi-card { background: var(--g-card); }
+.kpi-card::before { opacity: .5; }
+.kpi-card.accent::before { background: linear-gradient(135deg, #FF3D8A, #A855F7); }
+.kpi-card.green::before  { background: linear-gradient(135deg, #22C55E, #16A34A); }
+.kpi-card.blue::before   { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+.kpi-card.purple::before { background: linear-gradient(135deg, #A855F7, #7E22CE); }
+.kpi-card.red::before    { background: linear-gradient(135deg, #EF4444, #DC2626); }
+.kpi-card.yellow::before { background: linear-gradient(135deg, #F97316, #FFC107); }
+.kpi-value { font-family: 'Playfair Display', serif; color: var(--text-primary); }
+
+/* ──────────────────────────────────────────────
+   14. MODAL OVERLAY
+────────────────────────────────────────────── */
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--bg-card);
+  border: 1.5px solid rgba(255,61,138,.14);
+  border-radius: 26px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.18);
+}
+.modal-header {
+  background: linear-gradient(90deg, rgba(255,61,138,.05) 0%, rgba(168,85,247,.05) 100%);
+  border-bottom-color: rgba(255,61,138,.10);
+}
+.modal-header h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--text-primary);
+}
+
+/* ──────────────────────────────────────────────
+   15. TABLE HEADERS → rosa suave
+────────────────────────────────────────────── */
+.data-table thead th {
+  background: linear-gradient(90deg, rgba(255,61,138,.06) 0%, rgba(168,85,247,.06) 100%);
+  border-bottom-color: rgba(255,61,138,.10);
+  color: var(--text-primary);
+  font-family: 'Jost', sans-serif;
+}
+.data-table tbody tr:hover td {
+  background: rgba(255,61,138,.03);
+}
+body.dark-mode .data-table thead th {
+  background: rgba(255,61,138,.10);
+}
+
+/* ──────────────────────────────────────────────
+   16. PAGINATION
+────────────────────────────────────────────── */
+.pagination { display:flex; align-items:center; gap:6px; justify-content:center; padding:.75rem 0; }
+.page-btn {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1.5px solid var(--gris-200);
+  background: var(--bg-card);
+  color: var(--gris-600);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  transition: all 220ms;
+}
+.page-btn:hover  { border-color: var(--rosa-300); color: var(--rosa-500); }
+.page-btn.active { background: linear-gradient(135deg, #FF3D8A, #A855F7); color:#fff; border-color:transparent; }
+
+/* ──────────────────────────────────────────────
+   17. RECIPES GRID CARDS (admin)
+────────────────────────────────────────────── */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+  gap: 1rem;
+}
+
+/* ──────────────────────────────────────────────
+   18. RESPONSIVE FIXES
+────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .products-grid { grid-template-columns: 1fr 1fr; gap:.75rem; }
+  .filter-bar    { flex-direction: column; align-items: stretch; }
+  .tabs          { flex-wrap: wrap; }
+}
+@media (max-width: 400px) {
+  .products-grid { grid-template-columns: 1fr; }
+}
