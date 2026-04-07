@@ -158,14 +158,6 @@ async function viewSaleDetail(id) {
     const bgElevated = isDark ? '#1f2937' : '#f9fafb';
     const bgRow = isDark ? '#111827' : '#ffffff';
 
-    const s = res.data || {};
-    const items = s.items || [];
-    const isDark = document.body.classList.contains('dark-mode');
-    const textMuted = isDark ? '#9ca3af' : '#6b7280';
-    const border = isDark ? '#374151' : '#e5e7eb';
-    const bgElevated = isDark ? '#1f2937' : '#f9fafb';
-    const bgRow = isDark ? '#111827' : '#ffffff';
-
     document.querySelector('#modal-overlay .modal-body').innerHTML = `
       <div style="margin-bottom:1.25rem">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
@@ -173,61 +165,6 @@ async function viewSaleDetail(id) {
             <span style="color:${textMuted};font-size:.7rem;letter-spacing:.05em;text-transform:uppercase">Ticket</span>
             <div style="font-family:var(--font-mono);font-size:1rem;font-weight:700">${s.ticket_number || '-'}</div>
           </div>
-          <div style="text-align:right">
-            <span class="status-badge status-${s.status}" style="font-size:.8rem;padding:.25rem .75rem">${s.status}</span>
-            <div style="font-size:.75rem;color:${textMuted};margin-top:.25rem">${formatDate(s.created_at, true)}</div>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.75rem;padding:.75rem;background:${bgElevated};border-radius:var(--radius)">
-          <div><span style="color:${textMuted};font-size:.7rem">VENDEDOR</span><div style="font-weight:600;margin-top:.125rem">${s.user_first_name || ''} ${s.user_last_name || ''}</div></div>
-          <div><span style="color:${textMuted};font-size:.7rem">CAJA</span><div style="font-weight:600;margin-top:.125rem">#${s.cashbox_id || '-'}</div></div>
-          <div><span style="color:${textMuted};font-size:.7rem">CLIENTE</span><div style="font-weight:600;margin-top:.125rem">${s.customer_name || s.customer_identifier || '—'}</div></div>
-          <div><span style="color:${textMuted};font-size:.7rem">DESCUENTO</span><div style="font-weight:600;margin-top:.125rem">${s.discount_percentage ? s.discount_percentage + '%' : '—'} ${s.discount_amount ? '(' + formatCurrency(s.discount_amount) + ')' : ''}</div></div>
-        </div>
-      </div>
-
-      <div style="border:1px solid ${border};border-radius:var(--radius);overflow:hidden;margin-bottom:1rem">
-        <table style="width:100%;border-collapse:collapse;font-size:.8125rem">
-          <thead><tr style="background:${bgElevated}">
-            <th style="padding:.5rem .75rem;text-align:left;color:${textMuted};font-size:.7rem;font-weight:600">PRODUCTO / CÓDIGO</th>
-            <th style="padding:.5rem .75rem;text-align:center;color:${textMuted};font-size:.7rem;font-weight:600">CANT.</th>
-            <th style="padding:.5rem .75rem;text-align:right;color:${textMuted};font-size:.7rem;font-weight:600">PRECIO</th>
-            <th style="padding:.5rem .75rem;text-align:right;color:${textMuted};font-size:.7rem;font-weight:600">COSTO</th>
-            <th style="padding:.5rem .75rem;text-align:right;color:${textMuted};font-size:.7rem;font-weight:600">SUBTOTAL</th>
-          </tr></thead>
-          <tbody>${items.map(i => {
-            const qty = parseFloat(i.quantity) || 0;
-            const price = parseFloat(i.unit_price_at_sale) || 0;
-            const cost = parseFloat(i.unit_cost_at_sale) || 0;
-            const subtotal = qty * price;
-            return `<tr style="background:${bgRow}">
-              <td style="padding:.5rem .75rem;border-top:1px solid ${border}">
-                <div style="font-weight:600">${i.item_name_snapshot || '—'}</div>
-                <div style="font-size:.7rem;color:${textMuted};font-family:var(--font-mono)">${i.product_code || '—'}</div>
-              </td>
-              <td style="padding:.5rem .75rem;text-align:center;border-top:1px solid ${border}">${qty.toFixed(2)}</td>
-              <td style="padding:.5rem .75rem;text-align:right;border-top:1px solid ${border}">${formatCurrency(price)}</td>
-              <td style="padding:.5rem .75rem;text-align:right;border-top:1px solid ${border};color:${textMuted}">${formatCurrency(cost)}</td>
-              <td style="padding:.5rem .75rem;text-align:right;border-top:1px solid ${border};font-weight:700">${formatCurrency(subtotal)}</td>
-            </tr>`;
-          }).join('')}</tbody>
-        </table>
-      </div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:${bgElevated};border-radius:var(--radius);flex-wrap:wrap;gap:.5rem">
-        <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
-          <div><span style="color:${textMuted};font-size:.7rem">SUBTOTAL</span><div style="font-size:.875rem">${formatCurrency(s.subtotal || s.total_amount)}</div></div>
-          <div><span style="color:${textMuted};font-size:.7rem">DESCUENTO</span><div style="font-size:.875rem;color:var(--red)">-${formatCurrency(s.discount_amount || 0)}</div></div>
-        </div>
-        <div style="text-align:right">
-          <span style="color:${textMuted};font-size:.7rem">TOTAL</span>
-          <div style="font-size:1.5rem;font-weight:800;color:var(--accent)">${formatCurrency(s.total_amount)}</div>
-        </div>
-      </div>
-      <div style="margin-top:.75rem;text-align:center;font-size:.7rem;color:${textMuted}">
-        ID: ${s.id} • Creado: ${s.created_at ? new Date(s.created_at).toLocaleString('es-PE') : '—'}
-      </div>
-    `;
           <div style="text-align:right">
             <span class="status-badge status-${s.status}" style="font-size:.8rem;padding:.25rem .75rem">${s.status}</span>
             <div style="font-size:.75rem;color:${textMuted};margin-top:.25rem">${formatDate(s.created_at, true)}</div>
