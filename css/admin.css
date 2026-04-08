@@ -77,6 +77,14 @@
   letter-spacing: .09em;
 }
 
+/* Light mode overrides */
+body:not(.dark-mode) .sidebar-user-info .name {
+  color: #000;
+}
+body:not(.dark-mode) .sidebar-user-info .role {
+  color: #333;
+}
+
 .sidebar-nav {
   flex: 1;
   padding: .5rem 0 .75rem;
@@ -146,7 +154,7 @@
   width: 100%;
   background: transparent;
   border: 1px solid rgba(255,255,255,.10);
-  color: rgba(255,255,255,.45);
+  color: rgb(0, 0, 0);
   border-radius: var(--radius-md);
   padding: 9px 12px;
   font-size: 12px;
@@ -161,7 +169,7 @@
 .btn-logout:hover {
   background: rgba(239,68,68,.14);
   border-color: rgba(239,68,68,.35);
-  color: #FCA5A5;
+  color: #ff0000;
 }
 
 /* ── Main content ── */
