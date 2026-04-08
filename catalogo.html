@@ -121,6 +121,82 @@
     .skeleton-line.w-40 { width: 40%; }
     @keyframes shimmer { 0%,100%{opacity:1} 50%{opacity:.6} }
 
+    /* Hamburger para panel admin - solo responsivo para celulares */
+    .btn-admin-menu-mob {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--ink-700);
+      cursor: pointer;
+      padding: 0.5rem;
+      margin-left: 0.5rem;
+    }
+    @media (max-width: 640px) {
+      .btn-admin-menu-mob {
+        display: block;
+      }
+    }
+    .mobile-admin-nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+    .mobile-admin-nav-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .mobile-admin-nav {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 280px;
+      height: 100%;
+      background: var(--pub-card);
+      z-index: 1000;
+      transition: right 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .mobile-admin-nav.active {
+      right: 0;
+    }
+    .mobile-admin-nav .mobile-nav-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid var(--pub-line);
+    }
+    .mobile-admin-nav .mobile-nav-title {
+      font-weight: 600;
+      color: var(--ink-900);
+    }
+    .mobile-admin-nav .mobile-nav-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--ink-500);
+      cursor: pointer;
+    }
+    .mobile-admin-nav a {
+      padding: 1rem;
+      color: var(--ink-700);
+      text-decoration: none;
+      border-bottom: 1px solid var(--pub-line);
+      transition: background 0.2s;
+    }
+    .mobile-admin-nav a:hover {
+      background: var(--pub-line);
+    }
+
     /* Filtros chips scroll en móvil */
     .chips-scroll {
       display: flex;
@@ -143,6 +219,7 @@
       }
       .chips-scroll .chip { flex-shrink: 0; }
     }
+  </style>
   </style>
 </head>
 <body>
@@ -189,6 +266,7 @@
     <button class="btn-dark-toggle" id="btn-dark" onclick="toggleDark()" title="Modo oscuro" aria-label="Cambiar tema">🌙</button>
     <a href="index.html" class="btn btn-outline btn-sm hide-on-small">Panel Admin</a>
     <button class="btn-menu-mob" onclick="toggleMobileNav()" id="btn-menu" aria-label="Menú">☰</button>
+    <button class="btn-admin-menu-mob" onclick="toggleAdminMobileNav()" id="btn-admin-menu" aria-label="Menú Admin">☰</button>
   </div>
 </nav>
 
@@ -204,6 +282,19 @@
   <a href="#promociones" onclick="closeMobileNav()">🎁 Promociones</a>
   <a href="#contacto"    onclick="closeMobileNav()">📍 Contacto</a>
   <a href="index.html">🔐 Panel Admin →</a>
+</div>
+
+<!-- Mobile admin nav overlay -->
+<div class="mobile-admin-nav-overlay" id="mobile-admin-nav-overlay" onclick="closeAdminMobileNav()"></div>
+<div class="mobile-admin-nav" id="mobile-admin-nav">
+  <div class="mobile-nav-header">
+    <span class="mobile-nav-title">Panel Admin</span>
+    <button class="mobile-nav-close" onclick="closeAdminMobileNav()" aria-label="Cerrar menú">×</button>
+  </div>
+  <a href="index.html" onclick="closeAdminMobileNav()">Dashboard</a>
+  <a href="#" onclick="closeAdminMobileNav()">Inventario</a>
+  <a href="#" onclick="closeAdminMobileNav()">Ventas</a>
+  <a href="#" onclick="closeAdminMobileNav()">Reportes</a>
 </div>
 
 <!-- HERO CAROUSEL -->
@@ -445,6 +536,22 @@
 
 <!-- SCRIPTS -->
 <script src="js/main.js"></script>
+<script>
+// Funciones para el menú hamburguesa del panel admin
+function toggleAdminMobileNav() {
+  const overlay = document.getElementById('mobile-admin-nav-overlay');
+  const nav = document.getElementById('mobile-admin-nav');
+  overlay.classList.toggle('active');
+  nav.classList.toggle('active');
+}
+
+function closeAdminMobileNav() {
+  const overlay = document.getElementById('mobile-admin-nav-overlay');
+  const nav = document.getElementById('mobile-admin-nav');
+  overlay.classList.remove('active');
+  nav.classList.remove('active');
+}
+</script>
 <script>
   /* ════════════════════════════════════════
      CATÁLOGO BASADO EN RECETAS CON IMAGEN
