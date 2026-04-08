@@ -14,6 +14,146 @@
   <link rel="stylesheet" href="assets/styles-admin-components.css" />
   <link rel="stylesheet" href="assets/styles-wc-additions.css" />
   <link rel="stylesheet" href="assets/styles-overrides.css" />
+  <style>
+    /* ═══════════════════════════════════════
+       RESPONSIVE SIDEBAR - HAMBURGER MÓVIL
+       ═══════════════════════════════════════ */
+    
+    /* En desktop (≥641px): mostrar sidebar normalmente */
+    @media (min-width: 641px) {
+      .btn-hamburger {
+        display: none !important;
+      }
+      .sidebar {
+        position: relative;
+        translate: none;
+        opacity: 1;
+        visibility: visible;
+        width: auto;
+        height: auto;
+        background: transparent;
+        z-index: auto;
+      }
+      .sidebar-overlay {
+        display: none !important;
+      }
+    }
+
+    /* En móviles (≤640px): hamburger menu deslizante */
+    @media (max-width: 640px) {
+      .btn-hamburger {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: var(--gris-700);
+        cursor: pointer;
+        transition: color 0.2s ease;
+      }
+      .btn-hamburger:hover {
+        color: var(--gris-900);
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80vw;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--bg-base);
+        z-index: 1000;
+        transform: translateX(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .sidebar-brand {
+        padding: 1.5rem 1rem;
+        border-bottom: 1px solid var(--gris-200);
+        flex-shrink: 0;
+      }
+
+      .sidebar-user {
+        padding: 1rem;
+        border-bottom: 1px solid var(--gris-200);
+        flex-shrink: 0;
+      }
+
+      .sidebar-nav {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        flex: 1;
+        padding: 1rem 0;
+      }
+
+      .sidebar-footer {
+        padding: 1rem;
+        border-top: 1px solid var(--gris-200);
+        flex-shrink: 0;
+      }
+
+      .nav-item {
+        padding: 0.75rem 1rem;
+        font-size: 14px;
+      }
+
+      .nav-section-label {
+        padding: 0.75rem 1rem;
+        font-size: 12px;
+      }
+    }
+
+    /* Animación suave para el sidebar */
+    .sidebar {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.3s ease,
+                  visibility 0.3s ease;
+    }
+
+    /* Scroll suave para el sidebar en móviles */
+    @media (max-width: 640px) {
+      .sidebar-nav,
+      .sidebar {
+        scroll-behavior: smooth;
+      }
+    }
+  </style>
   <script>
     if (localStorage.getItem('ee_dark') === '1') document.body && document.body.classList.add('dark-mode');
   </script>
@@ -177,6 +317,65 @@
 
 <script type="module" src="app.js?v=2"></script>
 <script>
+  /* ═══════════════════════════════════════
+     FUNCIONES PARA SIDEBAR RESPONSIVO
+     ═══════════════════════════════════════ */
+  
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+  }
+
+  function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+  }
+
+  function openSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+  }
+
+  // Inicializar eventos
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const navItems = document.querySelectorAll('.sidebar .nav-item');
+
+    // Hamburger button click
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', toggleSidebar);
+    }
+
+    // Overlay click
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener('click', closeSidebar);
+    }
+
+    // Cerrar sidebar al hacer clic en un item de nav
+    navItems.forEach(item => {
+      item.addEventListener('click', function() {
+        // Solo cerrar en móviles
+        if (window.innerWidth <= 640) {
+          closeSidebar();
+        }
+      });
+    });
+
+    // Cerrar sidebar si se redimensiona a desktop
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 640) {
+        closeSidebar();
+      }
+    });
+  });
+
   function toggleAdminDark() {
     document.body.classList.toggle('dark-mode');
     const isDark = document.body.classList.contains('dark-mode');
