@@ -48,6 +48,7 @@ export function renderLogin() {
 
     try {
       await AuthController.login(email, password);
+      window.location.reload();
     } catch (err) {
       if (err.status === 429) {
         Toast.error('Demasiados intentos. Espera unos minutos e intenta de nuevo.');
