@@ -109,7 +109,7 @@ h1,h2,h3,h4 { font-family: var(--display); line-height: 1.2; color: var(--ink-90
 .btn-outline:hover { background: var(--pink); color: #fff; transform: translateY(-2px); box-shadow: var(--s-pink); }
 .btn-ghost { background: var(--pink-soft); color: var(--pink); border-color: transparent; }
 .btn-ghost:hover { background: #fce7f3; transform: translateY(-1px); }
-.btn-lg { font-size: 15px; padding: 14px 32px; }
+.btn-lg { font-size: 11px; padding: 14px 32px; }
 .btn-sm { font-size: 12px; padding: 8px 18px; }
 
 body.dark-mode .btn-ghost { background: rgba(236,72,153,.12); }
