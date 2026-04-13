@@ -798,6 +798,11 @@
 
   /* ── INIT ── */
   cargarCatalogo();
+  
+  // Auto-refresh cada 3 segundos para ver cambios del admin
+  setInterval(() => {
+    cargarCatalogo();
+  }, 3000);
   cargarPromos();
 </script>
 </body>
