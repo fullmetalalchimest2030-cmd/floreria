@@ -554,37 +554,51 @@ function closeAdminMobileNav() {
 </script>
 <script>
   /* ════════════════════════════════════════
-     CATÁLOGO BASADO EN RECETAS CON IMAGEN
-     Solo muestra recetas donde image_url != null
+     CATÁLOGO BASADO EN PRODUCTOS Y RECETAS
+     Muestra productos/recetas con show_in_catalog=true e image_url
   ════════════════════════════════════════ */
   const API_BASE_CAT = 'https://system-enterprise.onrender.com/api/v1';
 
-  let todasRecetas = [];   // Recetas con imagen cargadas
-  let catActualCat = '';   // Categoría seleccionada
+  let todasRecetas = [];
+  let catActualCat = '';
   let paginaActual = 0;
   const POR_PAGINA = 8;
 
-  async function cargarRecetasCatalogo() {
+  async function cargarCatalogo() {
     try {
-      const res = await fetch(`${API_BASE_CAT}/catalog/recipes`, {
+      const resProd = await fetch(`${API_BASE_CAT}/catalog/products`, {
         headers: { 'Content-Type': 'application/json' }
       });
-      if (!res.ok) throw new Error('Error al cargar recetas');
-      const data = await res.json();
-      // El backend ya filtra show_in_catalog=true, is_active=true y sin deleted_at
-      todasRecetas = (data.data || data || []).filter(r =>
-        r.image_url &&
-        r.image_url.trim() !== '' &&
-        r.image_url !== 'null'
-      );
+      
+      let productos = [];
+      if (resProd.ok) {
+        const dataProd = await resProd.json();
+        productos = (dataProd.data || dataProd || []).filter(p => p.name);
+      }
 
+      const resRec = await fetch(`${API_BASE_CAT}/catalog/recipes`, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      let recetas = [];
+      if (resRec.ok) {
+        const dataRec = await resRec.json();
+        recetas = (dataRec.data || dataRec || []).filter(r => r.name);
+      }
+
+      todasRecetas = [...recetas, ...productos];
+      
       construirFiltrosCategorias();
       renderRecetasCatalogo();
     } catch (e) {
-      console.warn('No se pudo cargar recetas desde API, usando fallback', e);
+      console.warn('No se pudo cargar catálogo', e);
       todasRecetas = [];
       renderRecetasCatalogo();
     }
+  }
+
+  async function cargarRecetasCatalogo() {
+    await cargarCatalogo();
   }
 
   function construirFiltrosCategorias() {
@@ -625,20 +639,26 @@ function closeAdminMobileNav() {
     const items  = lista.slice(inicio, inicio + POR_PAGINA);
     const totalPags = Math.ceil(lista.length / POR_PAGINA);
 
+    // Placeholder de imagen
+    const placeholderImg = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23f5e6f0" width="400" height="300"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-family="sans-serif" font-size="48">🌸</text></svg>';
+
     grid.innerHTML = items.map(r => {
-      const precio = r.suggested_price ? `S/ ${parseFloat(r.suggested_price).toFixed(2)}` : null;
+      // Productos tienen 'price', recetas tienen 'suggested_price'
+      const precioVal = r.suggested_price || r.price;
+      const precio = precioVal ? `S/ ${parseFloat(precioVal).toFixed(2)}` : null;
       const nombre = r.name || 'Arreglo floral';
       const desc = r.description || '';
       const cat  = r.category_name || '';
       const safe = nombre.replace(/'/g, "\\'");
+      const imgUrl = (r.image_url && r.image_url.trim() && r.image_url !== 'null') ? r.image_url : placeholderImg;
 
       return `
-        <div class="recipe-pub-card" onclick="pedirReceta('${safe}',${r.suggested_price||0})">
+        <div class="recipe-pub-card" onclick="pedirReceta('${safe}',${precioVal||0})">
           <div class="recipe-pub-img">
-            <img src="${r.image_url}"
+            <img src="${imgUrl}"
                  alt="${nombre}"
                  loading="lazy"
-                 onerror="this.closest('.recipe-pub-card').style.display='none'">
+                 onerror="this.src='${placeholderImg}'">
             ${precio ? `<div class="recipe-pub-badge">Precio referencial</div>` : ''}
           </div>
           <div class="recipe-pub-body">
@@ -647,7 +667,7 @@ function closeAdminMobileNav() {
             ${desc ? `<div class="recipe-pub-desc">${desc}</div>` : '<div class="recipe-pub-desc"></div>'}
             <div class="recipe-pub-footer">
               ${precio ? `<div class="recipe-pub-price">${precio}</div>` : '<div></div>'}
-              <button class="btn-pedir" onclick="event.stopPropagation();pedirReceta('${safe}',${r.suggested_price||0})">
+              <button class="btn-pedir" onclick="event.stopPropagation();pedirReceta('${safe}',${precioVal||0})">
                 Pedir 📱
               </button>
             </div>
@@ -884,7 +904,7 @@ function closeAdminMobileNav() {
   });
 
   /* ── INIT ── */
-  cargarRecetasCatalogo();
+  cargarCatalogo();
   cargarPromos();
 </script>
 </body>

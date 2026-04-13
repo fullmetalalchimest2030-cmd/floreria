@@ -45,6 +45,7 @@ export const ProductService = {
   getLowStock: () => http.get('/products/low-stock'),
   updateStock: (id, data) => http.put(`/products/${id}/stock`, data),
   search: (q) => http.get('/products/search', { q }),
+  toggleCatalog: (id, show) => http.put(`/products/${id}/catalog`, { show_in_catalog: show }),
 };
 
 // ─── INVENTARIO ─────────────────────────────────────────────────────────────
