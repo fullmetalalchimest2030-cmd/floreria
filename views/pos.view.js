@@ -265,6 +265,9 @@ function renderCatalogGrid(items, type) {
       ? (outOfStock ? '❌ Sin stock' : `📦 ${item.stock_cached}`)
       : (outOfStock ? '❌ Sin stock' : (item.max_quantity ? `✓ Máx: ${item.max_quantity}` : '✓ Disponible'));
 
+    const hasImage = item.image_url && item.image_url.trim() && item.image_url !== 'null';
+    const iconEmoji = isProduct ? '🌺' : '💐';
+
     // Serializar para atributo data-* (seguro contra comillas)
     const safeJson = JSON.stringify(item)
       .replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
@@ -275,7 +278,9 @@ function renderCatalogGrid(items, type) {
         data-item="${safeJson}"
         ${!outOfStock ? 'onclick="window._posClickCard(this)"' : ''}
         title="${outOfStock ? 'Sin stock disponible' : `Agregar: ${item.name}`}">
-        <div class="product-icon">${isProduct ? '🌺' : '💐'}</div>
+        ${hasImage 
+          ? `<div class="product-img-pos"><img src="${item.image_url}" alt="${escHtml(item.name)}" onerror="this.outerHTML='<span class=\\'product-icon\\'>${iconEmoji}</span>'"></div>` 
+          : `<div class="product-icon">${iconEmoji}</div>`}
         <div class="product-name">${escHtml(item.name)}</div>
         <div class="product-price">${formatCurrency(price)}</div>
         <div class="product-stock">${stockLabel}</div>
