@@ -101,9 +101,9 @@ async function loadProductPerformance() {
 
     content.innerHTML = `
       <div class="kpi-grid" style="margin-bottom:1.5rem">
-        <div class="kpi-card accent"><span class="kpi-icon">📦</span><div class="kpi-value">${formatNumber(totals.total_units_sold || 0)}</div><div class="kpi-label">Unidades Vendidas</div></div>
+        <div class="kpi-card accent"><span class="kpi-icon">📦</span><div class="kpi-value">${parseInt(totals.total_units_sold) || 0}</div><div class="kpi-label">Unidades Vendidas</div></div>
         <div class="kpi-card green"><span class="kpi-icon">💰</span><div class="kpi-value">${formatCurrency(totals.total_revenue || 0)}</div><div class="kpi-label">Ingresos Totales</div></div>
-        <div class="kpi-card blue"><span class="kpi-icon">🧾</span><div class="kpi-value">${formatNumber(totals.total_transactions || 0)}</div><div class="kpi-label">Transacciones</div></div>
+        <div class="kpi-card blue"><span class="kpi-icon">🧾</span><div class="kpi-value">${parseInt(totals.total_transactions) || 0}</div><div class="kpi-label">Transacciones</div></div>
         <div class="kpi-card"><span class="kpi-icon">🏷️</span><div class="kpi-value">${formatCurrency(totals.average_price_per_unit || 0)}</div><div class="kpi-label">Precio Promedio</div></div>
       </div>
 
@@ -126,12 +126,12 @@ async function loadProductPerformance() {
           [
             { key: 'product_name',  label: 'Producto' },
             { key: 'category_name', label: 'Categoría' },
-            { key: 'units_sold',    label: 'Unidades',    render: (v) => `<span style="font-family:var(--font-mono)">${formatNumber(v)}</span>` },
+            { key: 'units_sold',    label: 'Unidades',    render: (v) => `<span style="font-family:var(--font-mono)">${parseInt(v) || 0}</span>` },
             { key: 'revenue',       label: 'Ingresos',    render: (v) => `<span style="color:var(--accent);font-weight:700">${formatCurrency(v)}</span>` },
             { key: 'avg_price',     label: 'Precio Prom.',render: (v) => `<span style="font-family:var(--font-mono)">${formatCurrency(v)}</span>` },
             { key: 'profit_margin', label: 'Margen',      render: (v) => `<span style="color:var(--green)">${formatPercent(v)}</span>` },
-            { key: 'transactions',  label: 'Transacciones',render: (v) => `<span style="font-family:var(--font-mono)">${formatNumber(v)}</span>` },
-            { key: 'current_stock', label: 'Stock',       render: (v) => `<span style="font-family:var(--font-mono);color:${v < 20 ? 'var(--red)' : 'var(--text-secondary)'}">${formatNumber(v)}</span>` },
+            { key: 'transactions',  label: 'Transacciones',render: (v) => `<span style="font-family:var(--font-mono)">${parseInt(v) || 0}</span>` },
+            { key: 'current_stock', label: 'Stock',       render: (v) => `<span style="font-family:var(--font-mono);color:${parseInt(v) < 20 ? 'var(--red)' : 'var(--text-secondary)'}">${parseInt(v) || 0}</span>` },
           ],
           products, { emptyMsg: 'Sin datos de productos' }
         )}

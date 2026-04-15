@@ -110,7 +110,7 @@ async function loadMovementsData() {
           return `<span class="status-badge ${isIn ? 'status-active' : 'status-cancelled'}">${isIn ? '↑' : '↓'} ${v}</span>`;
         }
       },
-      { key: 'quantity', label: 'Cantidad', render: (v) => `<span style="font-family:var(--font-mono);font-weight:700">${formatNumber(v)}</span>` },
+      { key: 'quantity', label: 'Cantidad', render: (v) => `<span style="font-family:var(--font-mono);font-weight:700">${parseInt(v) || 0}</span>` },
       { key: 'unit_cost', label: 'Costo Unit.', render: (v) => v ? formatCurrency(v) : '—' },
       { key: 'user_first_name', label: 'Registrado por', render: (v, row) => `${v || ''} ${row.user_last_name || ''}`.trim() || '—' },
     ];
@@ -152,7 +152,7 @@ async function searchProductsForKardex(q) {
       <div style="display:flex;align-items:center;justify-content:space-between;padding:.625rem .75rem;background:var(--bg-elevated);border-radius:var(--radius);cursor:pointer;border:1px solid var(--border-light)"
         onclick="window._invViewKardex(${p.id}, '${p.name.replace(/'/g, "\\'")}')">
         <span style="font-weight:600">${p.name}</span>
-        <span style="font-size:.75rem;color:var(--text-muted)">Stock: ${p.stock_cached}</span>
+        <span style="font-size:.75rem;color:var(--text-muted)">Stock: ${parseInt(p.stock_cached) || 0}</span>
       </div>
     `).join('') || '<div class="empty-state">Sin resultados</div>';
   } catch {}
@@ -172,11 +172,11 @@ async function loadKardex(productId, productName) {
         key: 'quantity', label: 'Entrada/Salida',
         render: (v, row) => {
           const isIn = row.movement_type_code === 'purchase' || row.movement_type_code?.includes('in');
-          return `<span style="color:${isIn ? 'var(--green)' : 'var(--red)'};font-weight:700;font-family:var(--font-mono)">${isIn ? '+' : '-'}${formatNumber(Math.abs(v))}</span>`;
+          return `<span style="color:${isIn ? 'var(--green)' : 'var(--red)'};font-weight:700;font-family:var(--font-mono)">${isIn ? '+' : '-'}${parseInt(Math.abs(v)) || 0}</span>`;
         }
       },
       { key: 'unit_cost', label: 'Costo', render: (v) => v ? formatCurrency(v) : '—' },
-      { key: 'balance', label: 'Saldo', render: (v) => `<span style="font-weight:700;font-family:var(--font-mono)">${formatNumber(v)}</span>` },
+      { key: 'balance', label: 'Saldo', render: (v) => `<span style="font-weight:700;font-family:var(--font-mono)">${parseInt(v) || 0}</span>` },
       { key: 'user_first_name', label: 'Usuario', render: (v, row) => `${v || ''} ${row.user_last_name || ''}`.trim() },
     ];
 
@@ -209,19 +209,17 @@ async function loadSummary() {
       <div class="kpi-grid" style="margin-bottom:1.5rem">
         <div class="kpi-card green">
           <span class="kpi-icon">↑</span>
-          <div class="kpi-value">${formatNumber(stats.total_inbound)}</div>
-          <div class="kpi-label">Total Entradas</div>
-          <div class="kpi-delta up">${formatNumber(stats.inbound_movements)} movimientos</div>
-        </div>
-        <div class="kpi-card red">
-          <span class="kpi-icon">↓</span>
-          <div class="kpi-value">${formatNumber(stats.total_outbound)}</div>
-          <div class="kpi-label">Total Salidas</div>
-          <div class="kpi-delta down">${formatNumber(stats.outbound_movements)} movimientos</div>
+<div class="kpi-value">${parseInt(stats.total_inbound) || 0}</div>
+          <div class="kpi-delta up">${parseInt(stats.inbound_movements) || 0} movimientos</div>
         </div>
         <div class="kpi-card blue">
           <span class="kpi-icon">📋</span>
-          <div class="kpi-value">${formatNumber(stats.total_movements)}</div>
+          <div class="kpi-value">${parseInt(stats.total_outbound) || 0}</div>
+          <div class="kpi-delta down">${parseInt(stats.outbound_movements) || 0} movimientos</div>
+        </div>
+        <div class="kpi-card blue">
+          <span class="kpi-icon">📋</span>
+          <div class="kpi-value">${parseInt(stats.total_movements) || 0}</div>
           <div class="kpi-label">Total Movimientos</div>
         </div>
       </div>
@@ -233,7 +231,7 @@ async function loadSummary() {
         ${buildTable(
           [
             { key: 'category_name', label: 'Categoría' },
-            { key: 'total_products', label: 'Productos', render: (v) => `<span style="font-family:var(--font-mono)">${formatNumber(v)}</span>` },
+            { key: 'total_products', label: 'Productos', render: (v) => `<span style="font-family:var(--font-mono)">${parseInt(v) || 0}</span>` },
             { key: 'total_value', label: 'Valor Total', render: (v) => `<span style="color:var(--accent);font-weight:700">${formatCurrency(v)}</span>` },
           ],
           summary,
@@ -259,19 +257,21 @@ async function loadLowStock() {
       {
         key: 'stock_cached', label: 'Stock Actual',
         render: (v, row) => {
-          const pct = Math.min(100, (v / Math.max(1, row.min_stock)) * 100);
+          const stockVal = parseInt(v) || 0;
+          const minStockVal = parseInt(row.min_stock) || 1;
+          const pct = Math.min(100, (stockVal / Math.max(1, minStockVal)) * 100);
           return `<div class="stock-bar-wrap">
-            <span style="font-family:var(--font-mono);font-weight:700;color:var(--red)">${v}</span>
+            <span style="font-family:var(--font-mono);font-weight:700;color:var(--red)">${stockVal}</span>
             <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:${pct}%;background:var(--red)"></div></div>
           </div>`;
         }
       },
-      { key: 'min_stock', label: 'Stock Mínimo', render: (v) => `<span style="font-family:var(--font-mono)">${v}</span>` },
+      { key: 'min_stock', label: 'Stock Mínimo', render: (v) => `<span style="font-family:var(--font-mono)">${parseInt(v) || 0}</span>` },
       {
         key: 'id', label: 'Déficit',
         render: (v, row) => {
-          const deficit = row.min_stock - row.stock_cached;
-          return `<span style="color:var(--red);font-weight:700">-${deficit}</span>`;
+          const deficit = parseInt(row.min_stock || 0) - parseInt(row.stock_cached || 0);
+          return `<span style="color:var(--red);font-weight:700">-${parseInt(deficit) || 0}</span>`;
         }
       },
     ];
@@ -300,7 +300,7 @@ async function openMovementForm() {
   const user = Store.get('user');
   const fields = [
     { name: 'product_id', label: 'Producto', type: 'select', required: true,
-      options: products.map(p => ({ value: p.id, label: `${p.name} (Stock: ${p.stock_cached})` })), span: 2 },
+      options: products.map(p => ({ value: p.id, label: `${p.name} (Stock: ${parseInt(p.stock_cached) || 0})` })), span: 2 },
     { name: 'movement_type', label: 'Tipo de Movimiento', type: 'select', required: true,
       options: [
         { value: 'IN', label: '↑ Entrada (IN)' },

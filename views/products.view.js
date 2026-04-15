@@ -143,11 +143,13 @@ function renderProductsTable(container, data, lowStockMode = false) {
     {
       key: 'stock_cached', label: 'Stock',
       render: (v, row) => {
-        const pct = Math.min(100, (v / Math.max(1, row.min_stock || 20)) * 100);
+        const stockVal = parseInt(v) || 0;
+        const minStockVal = parseInt(row.min_stock) || 20;
+        const pct = Math.min(100, (stockVal / Math.max(1, minStockVal)) * 100);
         const color = pct < 50 ? 'var(--red)' : pct < 80 ? 'var(--yellow)' : 'var(--green)';
         return `
           <div class="stock-bar-wrap">
-            <span style="font-family:var(--font-mono);font-size:.8125rem;min-width:32px">${v}</span>
+            <span style="font-family:var(--font-mono);font-size:.8125rem;min-width:32px">${stockVal}</span>
             <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:${pct}%;background:${color}"></div></div>
           </div>`;
       }
@@ -204,7 +206,17 @@ async function openProductForm(id) {
     { name: 'category_id', label: 'Categoría', type: 'select', required: true,
       options: categories.map(c => ({ value: c.id, label: c.name })) },
     { name: 'sku', label: 'SKU', placeholder: 'Ej: ROS-001' },
-    { name: 'unit_of_measure', label: 'Unidad de Medida', required: true, placeholder: 'und, kg, litro...' },
+    { name: 'unit_of_measure', label: 'Unidad de Medida', type: 'select', required: true,
+      options: [
+        { value: 'und', label: 'und (unidad)' },
+        { value: 'pza', label: 'pza (pieza)' },
+        { value: 'ramo', label: 'ramo' },
+        { value: 'doc', label: 'doc (docena)' },
+        { value: 'manojo', label: 'manojo' },
+        { value: 'mazo', label: 'mazo' },
+        { value: 'kg', label: 'kg (kilogramo)' },
+        { value: 'g', label: 'g (gramo)' },
+      ]},
     { name: 'cost_price', label: 'Precio de Costo (S/)', type: 'number', required: true, step: '0.01', min: '0' },
     { name: 'sell_price', label: 'Precio de Venta (S/)', type: 'number', required: true, step: '0.01', min: '0' },
     { name: 'stock_cached', label: 'Stock Inicial', type: 'number', min: '0', defaultValue: 0 },

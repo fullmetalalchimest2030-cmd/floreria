@@ -253,8 +253,9 @@ function renderCatalogGrid(items, type) {
   const isProduct = (type === 'product');
 
   container.innerHTML = `<div class="products-grid">${items.map(item => {
+    const stockVal = parseInt(item.stock_cached) || 0;
     const outOfStock = isProduct
-      ? ((item.stock_cached ?? 0) <= 0)
+      ? (stockVal <= 0)
       : (item.can_produce === false);
 
     const price = isProduct
@@ -262,7 +263,7 @@ function renderCatalogGrid(items, type) {
       : (item.sell_price ?? (item.total_cost ?? 0) * 1.5);
 
     const stockLabel = isProduct
-      ? (outOfStock ? '❌ Sin stock' : `📦 ${item.stock_cached}`)
+      ? (outOfStock ? '❌ Sin stock' : `📦 ${stockVal}`)
       : (outOfStock ? '❌ Sin stock' : (item.max_quantity ? `✓ Máx: ${item.max_quantity}` : '✓ Disponible'));
 
     const hasImage = item.image_url && item.image_url.trim() && item.image_url !== 'null';

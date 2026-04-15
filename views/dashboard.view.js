@@ -143,7 +143,7 @@ function renderTopSellersList(topSellers) {
         <span class="top-seller-rank">${medals[i] || i + 1}</span>
         <div class="top-seller-info">
           <div class="top-seller-name">${p.name || p.product_name}</div>
-          <div class="top-seller-units">${formatNumber(p.units_sold)} uds</div>
+          <div class="top-seller-units">${parseInt(p.units_sold) || 0} uds</div>
         </div>
         <div class="top-seller-revenue">${formatCurrency(p.total_revenue || p.revenue)}</div>
       </div>

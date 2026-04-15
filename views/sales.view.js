@@ -197,7 +197,7 @@ async function viewSaleDetail(id) {
                 <div style="font-weight:600">${i.item_name_snapshot || '—'}</div>
                 <div style="font-size:.7rem;color:${textMuted};font-family:var(--font-mono)">${i.product_code || '—'}</div>
               </td>
-              <td style="padding:.5rem .75rem;text-align:center;border-top:1px solid ${border}">${qty.toFixed(2)}</td>
+              <td style="padding:.5rem .75rem;text-align:center;border-top:1px solid ${border}">${parseInt(qty) || 0}</td>
               <td style="padding:.5rem .75rem;text-align:right;border-top:1px solid ${border}">${formatCurrency(price)}</td>
               <td style="padding:.5rem .75rem;text-align:right;border-top:1px solid ${border};color:${textMuted}">${formatCurrency(cost)}</td>
               <td style="padding:.5rem .75rem;text-align:right;border-top:1px solid ${border};font-weight:700">${formatCurrency(subtotal)}</td>
